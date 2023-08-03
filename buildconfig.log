@@ -1,0 +1,35 @@
+------------------------DOCKER------------------------
+# Build command.
+
+    docker build -t react-image .
+
+# Run docker command
+
+    docker run -it -d --name react-app -p 3000:3000 react-image
+
+------------------------NGINX------------------------
+
+##Config foward 80 - > 3000
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name gax.testing.com;  
+
+        location / {
+
+                proxy_cache_bypass $http_upgrade;
+
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_pass http://localhost:3000;
+
+        }
+
+}
+
